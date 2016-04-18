@@ -1,0 +1,23 @@
+---
+
+- name: install ntpdate
+  register: install
+  apt: { name: ntpdate }
+
+- name: configure ntpdate
+  when: ntpdate.servers is defined
+  register: configure
+  with_items: '{{ ntpdate.servers }}'
+  lineinfile:
+    dest: /etc/ntp.conf
+    create: True
+    line: 'server {{ item }}'
+
+- name: run after config
+  when: install.changed or configure.changed 
+  command: ntpdate-debian -s
+
+- name: setup crontab
+  template:
+    src: ntpdate.j2
+    dest: /etc/cron.d/ntpdate
