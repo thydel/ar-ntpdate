@@ -14,8 +14,9 @@
     line: 'server {{ item }}'
 
 - name: run after config
-  when: install.changed or configure.changed 
-  command: ntpdate-debian -s
+  when: install.changed or configure.changed
+  failed_when: False
+  command: ntpdate-debian
 
 - name: setup crontab
   template:
