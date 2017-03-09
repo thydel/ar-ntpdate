@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+{% for s in servers_configuration %}
+{%     if s.server is defined %}
+server {{ s.server }}
+{%     	  else %}
+{%     endif %}
+{% endfor %}
