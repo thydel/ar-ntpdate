@@ -5,14 +5,11 @@
   apt: { name: ntpdate }
 
 - name: configure ntpdate
-  when: ntpdate.servers is defined
   register: configure
-  with_items: '{{ ntpdate.servers }}'
-  lineinfile:
+  template:
+    src: conf.j2
     dest: /etc/ntp.conf
-    create: True
-    line: 'server {{ item }}'
-
+    
 - name: run after config
   when: install.changed or configure.changed
   failed_when: False
