@@ -4,6 +4,10 @@
   register: install
   apt: { name: ntpdate }
 
+- assert:
+    that: servers_configurations[inventory_hostname] is defined
+    fail_msg: "dans infra-data/vars/direct/ntp.yml, définir le serveur {{ inventory_hostname }} dans servers_configurations"
+
 - name: configure ntpdate
   register: configure
   template:
